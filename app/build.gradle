@@ -6,6 +6,11 @@ plugins {
 android {
     compileSdk 32
 
+//    데이터 바인딩 허용
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.github.royalfamily.vagan"
         minSdk 26
