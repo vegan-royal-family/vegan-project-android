@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Veganprojectandroid">
         <activity
-            android:name=".MainActivity"
+            android:name="com.github.royalfamily.vagan.ui.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

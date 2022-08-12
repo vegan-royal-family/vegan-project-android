@@ -1,8 +1,11 @@
-package com.github.royalfamily.vagan
+package com.github.royalfamily.vagan.ui.login.main
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import com.github.royalfamily.vagan.ui.login.base.BaseActivity
+import com.github.royalfamily.vagan.R
 import com.github.royalfamily.vagan.databinding.ActivityMainBinding
+import com.github.royalfamily.vagan.ui.login.LoginActivity
 
 class MainActivity : BaseActivity() {
 /*
@@ -21,6 +24,16 @@ class MainActivity : BaseActivity() {
 //        나중에 LiveData 사용시, LiveData의 생명주기가 해당 액티비티에 따른다는 것을 명시하는 것입니다.
         binding.lifecycleOwner = this@MainActivity
 
-        binding.text.text = "hello"
+    }
+
+
+//    BaseActivity의 setListener를 재정의하고, 이 함수는 super인 BaseActivity의 onResume에서 호출됩니다.
+    override fun setListener() {
+        super.setListener()
+
+        binding.btnNext.setOnClickListener {
+            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+            finish()
+        }
     }
 }
