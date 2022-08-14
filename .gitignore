@@ -168,4 +168,6 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
+App/src/main/res/values/app_key.xml
+
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,kohana

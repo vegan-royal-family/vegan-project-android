@@ -1,6 +1,12 @@
 package com.github.royalfamily.vagan.ui.login
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
 
 /*
@@ -31,5 +37,12 @@ import androidx.lifecycle.ViewModel
 /*
     LoginViewModel이 상속받은 ViewModel은 Jetpack library의 AAC ViewModel이다.
  */
-class LoginViewModel : ViewModel(){
+
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    @ApplicationContext private val context: Context
+): ViewModel() {
+
+
+
 }

@@ -27,21 +27,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="id 입력"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/et_pw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="pw입력"
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_kakao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_kakao_login_medium_narrow"
                 android:textSize="20sp" />
 
-            <Button
-                android:id="@+id/btn_request"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="로그인"
-                android:textSize="20sp" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_google"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="google login" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
