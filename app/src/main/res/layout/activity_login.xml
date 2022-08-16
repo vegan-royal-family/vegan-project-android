@@ -46,6 +46,11 @@
                 android:textSize="20sp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_naver"
+                />
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_google"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

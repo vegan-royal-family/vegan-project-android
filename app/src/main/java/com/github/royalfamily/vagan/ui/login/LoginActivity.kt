@@ -1,14 +1,14 @@
 package com.github.royalfamily.vagan.ui.login
 
 import android.os.Bundle
-import android.util.Log
-import androidx.lifecycle.ViewModelProvider
 import com.github.royalfamily.vagan.R
 import com.github.royalfamily.vagan.databinding.ActivityLoginBinding
 import com.github.royalfamily.vagan.ui.base.BaseActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import androidx.activity.viewModels
 import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.OAuthLoginCallback
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -30,6 +30,10 @@ class LoginActivity : BaseActivity() {
         // xml에선 snake 표기법을 사용하는데, binding에서 id를 camel 표기법으로 변환하기때문에 btnRequest로 접근합니다.
         binding.btnKakao.setOnClickListener {
             loginWithKakaoTalk()
+        }
+
+        binding.btnNaver.setOnClickListener {
+            loginWithNaverAccount()
         }
     }
 
@@ -55,5 +59,25 @@ class LoginActivity : BaseActivity() {
                 }
             }
     }
-    
+
+    private fun loginWithNaverAccount() {
+        val oauthLoginCallback = object : OAuthLoginCallback {
+            override fun onSuccess() {
+                showToast("로그인 성공(토큰) :  ${NaverIdLoginSDK.getAccessToken()}")
+            }
+
+            override fun onFailure(httpStatus: Int, message: String) {
+                val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                showToast("로그인 실패 $errorCode : $errorDescription")
+            }
+
+            override fun onError(errorCode: Int, message: String) {
+                onFailure(errorCode, message)
+            }
+        }
+
+        NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
+    }
+
 }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
+import com.navercorp.nid.NaverIdLoginSDK
 import dagger.hilt.android.HiltAndroidApp
 
 
@@ -32,8 +33,11 @@ class Application : Application() {
         context = this
         KakaoSdk.init(this,getString(R.string.kakao_app_key))
 
-        Log.d("test", Utility.getKeyHash(this) + "-------------------"
-        )
+        /** Naver Login Module Initialize */
+        val naverClientId = getString(R.string.naver_client_id)
+        val naverClientSecret = getString(R.string.naver_client_secret)
+        val naverClientName = getString(R.string.naver_client_name)
+        NaverIdLoginSDK.initialize(this, naverClientId, naverClientSecret , naverClientName)
     }
 
 }

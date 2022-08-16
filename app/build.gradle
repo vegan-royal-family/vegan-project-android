@@ -73,6 +73,11 @@ dependencies {
 //        implementation "com.kakao.sdk:v2-friend:$kakao_version" // 카카오톡 소셜 피커, 리소스 번들 파일 포함
 
 
+//    naver
+//    implementation 'com.navercorp.nid:oauth:5.1.1' // jdk 11
+    implementation 'com.navercorp.nid:oauth-jdk8:5.1.1' // jdk 8
+
+
 }
 
 kapt {
