@@ -1,11 +1,18 @@
 package com.github.royalfamily.vagan.ui.login
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
+import com.github.royalfamily.vagan.Application
 import com.github.royalfamily.vagan.R
 import com.github.royalfamily.vagan.databinding.ActivityLoginBinding
 import com.github.royalfamily.vagan.ui.base.BaseActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.kakao.sdk.auth.model.OAuthToken
-import androidx.activity.viewModels
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
@@ -35,37 +42,38 @@ class LoginActivity : BaseActivity() {
         binding.btnNaver.setOnClickListener {
             loginWithNaverAccount()
         }
+
+        binding.btnGoogle.setOnClickListener {
+            loginWithGoogleAccount()
+        }
     }
+
 
     private fun loginWithKakaoTalk() {
         // 우선 카카오 앱으로 로그인을 시도하고, 실패하면 kakao 계정 로그인을 호출한다.
         UserApiClient.instance
             .loginWithKakaoTalk(this) { oAuthToken: OAuthToken?, error: Throwable? ->
                 if (error != null) {
-                    loginWithKakaoAcount()
+                    loginWithKakaoAccount()
                 } else if (oAuthToken != null) {
-                    showToast("로그인 성공(토큰) : " + oAuthToken.accessToken)
+                    viewModel.updateAccessToken(oAuthToken.accessToken)
                 }
             }
     }
 
-    private fun loginWithKakaoAcount() {
+    private fun loginWithKakaoAccount() {
         UserApiClient.instance
             .loginWithKakaoAccount(this) { oAuthToken: OAuthToken?, error: Throwable? ->
                 if (error != null) {
                     showToast("로그인 실패 $error")
                 } else if (oAuthToken != null) {
-                    showToast("로그인 성공(토큰) :  ${oAuthToken.accessToken}")
+                    viewModel.updateAccessToken(oAuthToken.accessToken)
                 }
             }
     }
 
     private fun loginWithNaverAccount() {
         val oauthLoginCallback = object : OAuthLoginCallback {
-            override fun onSuccess() {
-                showToast("로그인 성공(토큰) :  ${NaverIdLoginSDK.getAccessToken()}")
-            }
-
             override fun onFailure(httpStatus: Int, message: String) {
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                 val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
@@ -75,9 +83,51 @@ class LoginActivity : BaseActivity() {
             override fun onError(errorCode: Int, message: String) {
                 onFailure(errorCode, message)
             }
+
+            override fun onSuccess() {
+                NaverIdLoginSDK.getAccessToken()?.let { viewModel.updateAccessToken(it) }
+            }
         }
 
         NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
+    }
+
+    private fun loginWithGoogleAccount() {
+//        null이면 로그인 안한 상태
+        val account = GoogleSignIn.getLastSignedInAccount(this@LoginActivity)
+//        if (account != null) {
+//            Log.d("test", "=============== ${account}")
+//            showToast("이미 로그인 함 : "+account.idToken.toString())
+//        } else {
+            val signInIntent = Application.mGoogleSignInClient.signInIntent
+            startActivityForResult(signInIntent, 100)
+//        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == 100) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val acct = completedTask.getResult(ApiException::class.java)
+            if (acct != null) {
+
+                showToast(acct.serverAuthCode ?: String())
+            }
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            showToast(e.statusCode.toString())
+        }
     }
 
 }

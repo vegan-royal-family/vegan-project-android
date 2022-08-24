@@ -1,6 +1,8 @@
 package com.github.royalfamily.vagan.ui.login
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
@@ -41,8 +43,15 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     @ApplicationContext private val context: Context
-): ViewModel() {
+) : ViewModel() {
 
+    private var _accessToken = MutableLiveData<String>()
 
+    val accessToken: LiveData<String>
+        get() = _accessToken
+
+    fun updateAccessToken(oAuthToken : String) {
+        _accessToken.value = oAuthToken
+    }
 
 }

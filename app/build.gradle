@@ -75,7 +75,11 @@ dependencies {
 
 //    naver
 //    implementation 'com.navercorp.nid:oauth:5.1.1' // jdk 11
-    implementation 'com.navercorp.nid:oauth-jdk8:5.1.1' // jdk 8
+    implementation "com.navercorp.nid:oauth-jdk8:$naver_version" // jdk 8
+
+//    google
+    implementation "com.google.android.gms:play-services-auth:$google_version"
+
 
 
 }

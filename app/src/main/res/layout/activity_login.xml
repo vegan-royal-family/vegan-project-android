@@ -42,19 +42,23 @@
                 android:id="@+id/btn_kakao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_kakao_login_medium_narrow"
+                android:text="kakao login"
                 android:textSize="20sp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_naver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_naver"
-                />
+                android:text="naver login"
+                android:textSize="20sp" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_google"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="google login" />
+                android:text="google login"
+                android:textSize="20sp" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

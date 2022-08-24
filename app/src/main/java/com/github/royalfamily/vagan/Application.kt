@@ -3,6 +3,9 @@ package com.github.royalfamily.vagan
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.navercorp.nid.NaverIdLoginSDK
@@ -27,17 +30,25 @@ class Application : Application() {
 
     companion object {
         var context : Context? = null
+        lateinit var mGoogleSignInClient : GoogleSignInClient
     }
     override fun onCreate() {
         super.onCreate()
         context = this
         KakaoSdk.init(this,getString(R.string.kakao_app_key))
 
-        /** Naver Login Module Initialize */
         val naverClientId = getString(R.string.naver_client_id)
         val naverClientSecret = getString(R.string.naver_client_secret)
         val naverClientName = getString(R.string.naver_client_name)
         NaverIdLoginSDK.initialize(this, naverClientId, naverClientSecret , naverClientName)
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
+
+
     }
 
 }
