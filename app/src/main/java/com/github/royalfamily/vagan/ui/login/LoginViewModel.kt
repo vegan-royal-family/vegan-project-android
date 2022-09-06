@@ -4,10 +4,17 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.github.royalfamily.vagan.data.Repository
+import com.github.royalfamily.vagan.data.Resource
+import com.github.royalfamily.vagan.dto.AuthToken
+import com.github.royalfamily.vagan.enum.LoginType
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -42,16 +49,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
-) : ViewModel() {
+    private val repository: Repository
+): ViewModel() {
 
-    private var _accessToken = MutableLiveData<String>()
+    private val _requestToken = MutableLiveData<Resource<AuthToken.Response>>()
 
-    val accessToken: LiveData<String>
-        get() = _accessToken
+    val requestToken : LiveData<Resource<AuthToken.Response>>
+    get() = _requestToken
 
-    fun updateAccessToken(oAuthToken : String) {
-        _accessToken.value = oAuthToken
+    fun requestToken(type: LoginType, accessToken: String) = viewModelScope.launch {
+
+        val body = AuthToken.Request(
+            loginType = type.str,
+            accessToken = accessToken
+        )
+
+        repository.requestUserAuth(body).collect {
+            _requestToken.value = it
+        }
+
     }
+
 
 }
