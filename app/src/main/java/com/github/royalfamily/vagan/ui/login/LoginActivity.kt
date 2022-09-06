@@ -86,6 +86,7 @@ class LoginActivity : BaseActivity() {
                     oAuthToken.accessToken
                 )
             }
+        }
     }
 
     private fun loginWithNaverAccount() {
