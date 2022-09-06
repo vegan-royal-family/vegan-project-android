@@ -39,9 +39,11 @@ open class BaseActivity : AppCompatActivity() {
         super.onResume()
 
         setListener()
+        setObserver()
     }
 
     open fun setListener() {}
+    open fun setObserver() {}
 
     /*
      toast의 경우 어느 화면에서든 자유롭게 사용할 수 있는데,

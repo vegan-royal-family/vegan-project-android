@@ -1,11 +1,15 @@
 package com.github.royalfamily.vagan.ui.login
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import com.github.royalfamily.vagan.R
 import com.github.royalfamily.vagan.databinding.ActivityLoginBinding
 import com.github.royalfamily.vagan.ui.base.BaseActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import androidx.activity.viewModels
+import com.github.royalfamily.vagan.data.Resource
+import com.github.royalfamily.vagan.enum.LoginType
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
@@ -24,6 +28,7 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun setListener() {
+
         super.setListener()
 
         // Databinding을 해주었기 때문에, 위에서 선언한 binding 키워드로 xml의 view에 findViewById 없이 접근할 수 있어요.
@@ -35,49 +40,80 @@ class LoginActivity : BaseActivity() {
         binding.btnNaver.setOnClickListener {
             loginWithNaverAccount()
         }
+
+    }
+
+    override fun setObserver() {
+
+        viewModel.requestToken.observe(this) {
+            Log.d(
+                "API_RESPONSE",
+                "${it.status}, ${it.statusCode}, ${it.data?.isNew}, ${it.message}"
+            )
+        }
+
     }
 
     private fun loginWithKakaoTalk() {
         // 우선 카카오 앱으로 로그인을 시도하고, 실패하면 kakao 계정 로그인을 호출한다.
-        UserApiClient.instance
-            .loginWithKakaoTalk(this) { oAuthToken: OAuthToken?, error: Throwable? ->
-                if (error != null) {
-                    loginWithKakaoAcount()
-                } else if (oAuthToken != null) {
-                    showToast("로그인 성공(토큰) : " + oAuthToken.accessToken)
-                }
+        UserApiClient.instance.loginWithKakaoTalk(this) { oAuthToken: OAuthToken?, error: Throwable? ->
+            if (error != null) {
+                loginWithKakaoAcount()
+            } else if (oAuthToken != null) {
+                viewModel.requestToken(
+                    LoginType.KAKAO,
+                    oAuthToken.accessToken
+                )
             }
+        }
+
     }
 
     private fun loginWithKakaoAcount() {
-        UserApiClient.instance
-            .loginWithKakaoAccount(this) { oAuthToken: OAuthToken?, error: Throwable? ->
-                if (error != null) {
-                    showToast("로그인 실패 $error")
-                } else if (oAuthToken != null) {
-                    showToast("로그인 성공(토큰) :  ${oAuthToken.accessToken}")
-                }
+
+        UserApiClient.instance.loginWithKakaoAccount(this) { oAuthToken: OAuthToken?, error: Throwable? ->
+            if (error != null) {
+                showToast("로그인 실패 $error")
+            } else if (oAuthToken != null) {
+                viewModel.requestToken(
+                    LoginType.KAKAO,
+                    oAuthToken.accessToken
+                )
             }
+        }
+
     }
 
     private fun loginWithNaverAccount() {
+
         val oauthLoginCallback = object : OAuthLoginCallback {
             override fun onSuccess() {
-                showToast("로그인 성공(토큰) :  ${NaverIdLoginSDK.getAccessToken()}")
+
+                NaverIdLoginSDK.getAccessToken()?.let { accessToken ->
+                    viewModel.requestToken(
+                        LoginType.NAVER,
+                        accessToken
+                    )
+                }
+
             }
 
             override fun onFailure(httpStatus: Int, message: String) {
+
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                 val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                showToast("로그인 실패 $errorCode : $errorDescription")
+
             }
 
             override fun onError(errorCode: Int, message: String) {
+
                 onFailure(errorCode, message)
+
             }
         }
 
         NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
+
     }
 
 }
