@@ -1,0 +1,85 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
+    id 'kotlin-kapt'
+
+}
+
+android {
+    compileSdk 32
+
+//    데이터 바인딩 허용
+    dataBinding {
+        enabled = true
+    }
+
+    defaultConfig {
+        applicationId "com.github.royalfamily.vagan"
+        minSdk 26
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation 'androidx.activity:activity-ktx:1.5.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+
+//    hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+//    http
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:$okhttp_version"))
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:$okhttp_version"
+
+
+//    kakao
+//        implementation "com.kakao.sdk:v2-all:$kakao_version" // 전체 모듈 설치, 2.11.0 버전부터 지원
+    implementation "com.kakao.sdk:v2-user:$kakao_version" // 카카오 로그인
+//        implementation "com.kakao.sdk:v2-talk:$kakao_version" // 친구, 메시지(카카오톡)
+//        implementation "com.kakao.sdk:v2-story:$kakao_version" // 카카오스토리
+//        implementation "com.kakao.sdk:v2-share:$kakao_version" // 메시지(카카오톡 공유)
+//        implementation "com.kakao.sdk:v2-navi:$kakao_version" // 카카오내비
+//        implementation "com.kakao.sdk:v2-friend:$kakao_version" // 카카오톡 소셜 피커, 리소스 번들 파일 포함
+
+
+//    naver
+//    implementation 'com.navercorp.nid:oauth:5.1.1' // jdk 11
+    implementation 'com.navercorp.nid:oauth-jdk8:5.1.1' // jdk 8
+
+
+}
+
+kapt {
+    correctErrorTypes true
+}
