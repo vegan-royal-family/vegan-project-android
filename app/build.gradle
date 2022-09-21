@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
-
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -80,8 +80,7 @@ dependencies {
 //    google
     implementation "com.google.android.gms:play-services-auth:$google_version"
 
-
-
+    implementation platform('com.google.firebase:firebase-bom:30.4.1')
 }
 
 kapt {

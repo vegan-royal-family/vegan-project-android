@@ -1,20 +1,24 @@
 package com.github.royalfamily.vagan.ui.login
 
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.view.Gravity
+import android.view.View
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import com.github.royalfamily.vagan.Application
 import com.github.royalfamily.vagan.R
+import com.github.royalfamily.vagan.data.Resource
 import com.github.royalfamily.vagan.databinding.ActivityLoginBinding
+import com.github.royalfamily.vagan.enum.LoginType
 import com.github.royalfamily.vagan.ui.base.BaseActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import com.kakao.sdk.auth.model.OAuthToken
-import androidx.activity.viewModels
-import com.github.royalfamily.vagan.data.Resource
-import com.github.royalfamily.vagan.enum.LoginType
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
@@ -27,9 +31,27 @@ class LoginActivity : BaseActivity() {
     private val viewModel: LoginViewModel by viewModels()
     private val binding by binding<ActivityLoginBinding>(R.layout.activity_login)
 
+    val googleLoginLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
+            if (it.resultCode == RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                val data = task.getResult(ApiException::class.java)
+                viewModel.requestToken(
+                    LoginType.KAKAO,
+                    data.idToken.toString()
+                )
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.googleAccount = GoogleSignIn.getLastSignedInAccount(this@LoginActivity)
     }
 
     override fun setListener() {
@@ -46,6 +68,10 @@ class LoginActivity : BaseActivity() {
             loginWithNaverAccount()
         }
 
+        binding.btnGoogle.setOnClickListener {
+            loginWithGoogleAccount()
+        }
+
     }
 
     override fun setObserver() {
@@ -55,6 +81,13 @@ class LoginActivity : BaseActivity() {
                 "API_RESPONSE",
                 "${it.status}, ${it.statusCode}, ${it.data?.isNew}, ${it.message}"
             )
+        }
+
+        viewModel.status.observe(this) {
+            when(it) {
+                Resource.Status.LOADING -> showLoading(this, true)
+                else -> showLoading(this, false)
+            }
         }
 
     }
@@ -87,6 +120,7 @@ class LoginActivity : BaseActivity() {
                 )
             }
         }
+
     }
 
     private fun loginWithNaverAccount() {
@@ -118,6 +152,45 @@ class LoginActivity : BaseActivity() {
 
         NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
 
+    }
+
+    private fun loginWithGoogleAccount() {
+
+        if (viewModel.googleAccount?.idToken.isNullOrEmpty()) {
+            val intent = Application.mGoogleSignInClient.signInIntent
+            googleLoginLauncher.launch(intent)
+        } else {
+            viewModel.requestToken(
+                LoginType.GOOGLE,
+                viewModel.googleAccount?.idToken!!
+            )
+        }
+
+    }
+
+    fun showLoading(activity: Activity, isShow: Boolean) {
+        if (isShow) {
+            val linear = LinearLayout(activity)
+            linear.tag = "MyProgressBar"
+            linear.gravity = Gravity.CENTER
+            linear.setBackgroundColor(0x33000000)
+            val progressBar = ProgressBar(activity)
+            val layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            progressBar.layoutParams = layoutParams
+            linear.addView(progressBar)
+            linear.setOnClickListener{}
+            val rootView = activity.findViewById<FrameLayout>(android.R.id.content)
+            rootView.addView(linear)
+        } else {
+            val rootView = activity.findViewById<FrameLayout>(android.R.id.content)
+            val linear = rootView.findViewWithTag<LinearLayout>("MyProgressBar")
+            if (linear != null) {
+                rootView.removeView(linear)
+            }
+        }
     }
 
 }

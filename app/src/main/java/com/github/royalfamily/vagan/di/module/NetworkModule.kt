@@ -38,7 +38,7 @@ object NetworkModule {
 
     @Provides
     @Named(NETWORK_BASE_NAME_URL)
-    fun provideBaseUrl() = "https://zrighx4337.execute-api.ap-northeast-2.amazonaws.com/dev/"
+    fun provideBaseUrl() = "https://zrighx4337.execute-api.ap-northeast-2.amazonaws.com/"
 
     @Provides
     fun provideOkHttpClient() : OkHttpClient {

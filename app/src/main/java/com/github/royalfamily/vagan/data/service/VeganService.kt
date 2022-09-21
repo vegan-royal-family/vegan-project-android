@@ -9,7 +9,8 @@ import retrofit2.http.POST
 
 interface VeganService {
 
-    @POST("/auth/token")
+    @Headers("x-api-key:1GgYfzKT4Y49cxrqXzQkmak1chaTnVki886toguW")
+    @POST("/dev/auth/token")
     suspend fun requestUserAuth(
         @Body body: AuthToken.Request
     ) : Response<AuthToken.Response>

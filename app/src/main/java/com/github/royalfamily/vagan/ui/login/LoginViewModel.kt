@@ -9,6 +9,7 @@ import com.github.royalfamily.vagan.data.Repository
 import com.github.royalfamily.vagan.data.Resource
 import com.github.royalfamily.vagan.dto.AuthToken
 import com.github.royalfamily.vagan.enum.LoginType
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,12 +51,17 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: Repository
-): ViewModel() {
+) : ViewModel() {
+
+    private val _status = MutableLiveData<Resource.Status>()
+    val status: LiveData<Resource.Status>
+        get() = _status
+
 
     private val _requestToken = MutableLiveData<Resource<AuthToken.Response>>()
 
-    val requestToken : LiveData<Resource<AuthToken.Response>>
-    get() = _requestToken
+    val requestToken: LiveData<Resource<AuthToken.Response>>
+        get() = _requestToken
 
     fun requestToken(type: LoginType, accessToken: String) = viewModelScope.launch {
 
@@ -66,9 +72,12 @@ class LoginViewModel @Inject constructor(
 
         repository.requestUserAuth(body).collect {
             _requestToken.value = it
+            _status.value = it.status
         }
 
     }
+
+    var googleAccount: GoogleSignInAccount? = null
 
 
 }
