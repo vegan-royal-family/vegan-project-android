@@ -55,8 +55,8 @@
 
 <!--    Success-->
     <color name="success100">#FFE2FDD5</color>
-    <color name="success500">#FF31D834</color>
-    <color name="success700">#FF189B31</color>
+    <color name="success500">#FF31d834</color>
+    <color name="success700">#FF189b31</color>
 
 <!--    Warning-->
     <color name="warning100">#FFFFF7DA</color>
