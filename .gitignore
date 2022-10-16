@@ -12,6 +12,9 @@ local.properties
 # Log/OS Files
 *.log
 
+gradlew
+gradlew.bat
+
 # Android Studio generated files and folders
 captures/
 .externalNativeBuild/

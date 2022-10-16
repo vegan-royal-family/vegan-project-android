@@ -7,4 +7,64 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+<!--    Coral-->
+    <color name="primary50">#FFFFF8F6</color>
+    <color name="primary100">#FFFFEDDB</color>
+    <color name="primary200">#FFFFD687</color>
+    <color name="primary300">#FFFFBB94</color>
+    <color name="primary400">#FFFFAD79</color>
+    <color name="primary500">#FFFF744D</color>
+    <color name="primary600">#FFDB5038</color>
+    <color name="primary700">#FFB73126</color>
+    <color name="primary800">#FF931818</color>
+    <color name="primary900">#FF7A0E16</color>
+
+<!--    Green-->
+    <color name="secondary50">#FFF5FFEF</color>
+    <color name="secondary100">#FFE7FBCA</color>
+    <color name="secondary200">#FFCBF896</color>
+    <color name="secondary300">#FFA2EC60</color>
+    <color name="secondary400">#FF7AD938</color>
+    <color name="secondary500">#FF44C102</color>
+    <color name="secondary600">#FF2fA501</color>
+    <color name="secondary700">#FF1F8A01</color>
+    <color name="secondary800">#FF116F00</color>
+    <color name="secondary900">#FF085C00</color>
+
+<!--    Gray-->
+    <color name="gray50">#FFFCFEFF</color>
+    <color name="gray100">#FFF4F7F8</color>
+    <color name="gray200">#FFE9EEF1</color>
+    <color name="gray300">#FFCCD2D7</color>
+    <color name="gray400">#FFA4AAAF</color>
+    <color name="gray500">#FF70757A</color>
+    <color name="gray600">#FF515C68</color>
+    <color name="gray700">#FF384557</color>
+    <color name="gray800">#FF232F46</color>
+    <color name="gray900">#FF15203A</color>
+
+<!--    basic-->
+    <color name="default_black">#FF0F172A</color>
+    <color name="default_white">#FFFFFFFF</color>
+
+<!--    Danger-->
+    <color name="danger100">#FFFFE6DD</color>
+    <color name="danger500">#FFFF5667</color>
+    <color name="danger700">#FFB72B53</color>
+
+<!--    Success-->
+    <color name="success100">#FFE2FDD5</color>
+    <color name="success500">#FF31d834</color>
+    <color name="success700">#FF189b31</color>
+
+<!--    Warning-->
+    <color name="warning100">#FFFFF7DA</color>
+    <color name="warning500">#FFFFBE47</color>
+    <color name="warning700">#FFB77823</color>
+
+<!--    Info-->
+    <color name="info100">#FFD6F5FF</color>
+    <color name="info500">#FF35A4FF</color>
+    <color name="info700">#FF1A5FB7</color>
 </resources>
