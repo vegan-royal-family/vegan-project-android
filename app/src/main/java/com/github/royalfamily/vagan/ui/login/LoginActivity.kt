@@ -36,6 +36,7 @@ class LoginActivity : BaseActivity() {
             if (it.resultCode == RESULT_OK) {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
                 val data = task.getResult(ApiException::class.java)
+                resources
                 viewModel.requestToken(
                     LoginType.KAKAO,
                     data.idToken.toString()
