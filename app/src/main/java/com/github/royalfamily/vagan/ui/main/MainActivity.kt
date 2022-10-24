@@ -35,5 +35,9 @@ class MainActivity : BaseActivity() {
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             finish()
         }
+
+        binding.test.setOnClickListener {
+
+        }
     }
 }

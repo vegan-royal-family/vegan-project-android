@@ -2,8 +2,6 @@ package com.github.royalfamily.vagan.ui.component.button
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -14,22 +12,15 @@ import android.widget.TextView
 import com.github.royalfamily.vagan.R
 import com.github.royalfamily.vagan.util.SizeUtil
 
-class Button : LinearLayout {
+class IconButton : LinearLayout {
 
     private val buttonUtil = ButtonUtil(context)
 
     private lateinit var layout: LinearLayout
-    private lateinit var icLeft: ImageView
-    private lateinit var icRight: ImageView
-    private lateinit var tvContents: TextView
+    private lateinit var icMain: ImageView
     private lateinit var icProgress: ImageView
 
-    private var IC_LEFT = false
-    private var IC_RIGHT = false
-
     private val sizeUtil: SizeUtil = SizeUtil(context.resources)
-
-    private var iconTyped: Int = 0
 
     private var backgroundColorDefault = buttonUtil.primaryBackgroundColorDefault
     private var backgroundColorHover = buttonUtil.primaryBackgroundColorHover
@@ -40,8 +31,6 @@ class Button : LinearLayout {
     private var contentsColorHover = buttonUtil.primaryContentsColorHover
     private var contentsColorLoading = buttonUtil.primaryContentsColorLoading
     private var contentsColorDisabled = buttonUtil.primaryContentsColorDisabled
-
-
 
     constructor(context: Context?) : super(context) {
         initView()
@@ -60,34 +49,31 @@ class Button : LinearLayout {
     private fun initView() {
         val infService: String = Context.LAYOUT_INFLATER_SERVICE
         val li = context.getSystemService(infService) as LayoutInflater
-        val v: View = li.inflate(R.layout.component_button, this, false)
+        val v: View = li.inflate(R.layout.component_button_icon, this, false)
         addView(v)
 
         layout = findViewById(R.id.btn_layout)
-        icLeft = findViewById(R.id.ic_left)
-        icRight = findViewById(R.id.ic_right)
-        tvContents = findViewById(R.id.tv_contents)
+        icMain = findViewById(R.id.ic_main)
         icProgress = findViewById(R.id.ic_progress)
     }
 
     private fun getAttrs(attrs: AttributeSet?) {
-        val typedArray: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.BasicButton)
+        val typedArray: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.IconButton)
         setTypeArray(typedArray)
     }
 
     private fun getAttrs(attrs: AttributeSet?, defStyle: Int) {
         val typedArray =
-            context.obtainStyledAttributes(attrs, R.styleable.BasicButton, defStyle, 0)
+            context.obtainStyledAttributes(attrs, R.styleable.IconButton, defStyle, 0)
         setTypeArray(typedArray)
     }
 
     private fun setTypeArray(typedArray: TypedArray) {
 
-        setColorSystem(typedArray.getInteger(R.styleable.BasicButton_colorClass, 1))
-        typedArray.getString(R.styleable.BasicButton_text)?.let { setText(it) }
-        setButtonSize(typedArray.getInteger(R.styleable.BasicButton_size, buttonUtil.SIZE_MEDIUM))
+        setColorSystem(typedArray.getInteger(R.styleable.IconButton_colorClass, 1))
+        setButtonSize(typedArray.getInteger(R.styleable.IconButton_size, buttonUtil.SIZE_MEDIUM))
         setIcon(typedArray)
-        setStatus(typedArray.getInteger(R.styleable.BasicButton_status, buttonUtil.STATUS_ENABLED))
+        setStatus(typedArray.getInteger(R.styleable.IconButton_status, buttonUtil.STATUS_ENABLED))
 
         typedArray.recycle()
 
@@ -120,19 +106,10 @@ class Button : LinearLayout {
         }
     }
 
-    private fun setText(typed: String) {
-        tvContents.text = typed
-    }
-
     private fun setIcon(typedArray: TypedArray) {
-        val leftIcon = typedArray.getDrawable(R.styleable.BasicButton_setLeftIcon)
+        val leftIcon = typedArray.getDrawable(R.styleable.IconButton_setIcon)
         if (leftIcon != null) {
-            setLeftIcon(leftIcon)
-        }
-
-        val rightIcon = typedArray.getDrawable(R.styleable.BasicButton_setRightIcon)
-        if (rightIcon != null) {
-            setRightIcon(rightIcon)
+            icMain.background = leftIcon
         }
     }
 
@@ -140,43 +117,29 @@ class Button : LinearLayout {
         when (typed) {
             buttonUtil.SIZE_SMALL -> {
                 layout.setPadding(
-                    sizeUtil.dpToPx(16),
                     sizeUtil.dpToPx(6),
-                    sizeUtil.dpToPx(16),
+                    sizeUtil.dpToPx(6),
+                    sizeUtil.dpToPx(6),
                     sizeUtil.dpToPx(6)
                 )
             }
             buttonUtil.SIZE_MEDIUM -> {
                 layout.setPadding(
-                    sizeUtil.dpToPx(24),
                     sizeUtil.dpToPx(10),
-                    sizeUtil.dpToPx(24),
+                    sizeUtil.dpToPx(10),
+                    sizeUtil.dpToPx(10),
                     sizeUtil.dpToPx(10)
                 )
             }
             buttonUtil.SIZE_LARGE -> {
                 layout.setPadding(
-                    sizeUtil.dpToPx(24),
                     sizeUtil.dpToPx(16),
-                    sizeUtil.dpToPx(24),
+                    sizeUtil.dpToPx(16),
+                    sizeUtil.dpToPx(16),
                     sizeUtil.dpToPx(16)
                 )
             }
         }
-    }
-
-    private fun setLeftIcon(resource: Drawable) {
-        icRight.visibility = View.GONE
-        icLeft.visibility = View.VISIBLE
-        icLeft.background = resource
-        IC_LEFT = true
-    }
-
-    private fun setRightIcon(resource: Drawable) {
-        icRight.visibility = View.VISIBLE
-        icLeft.visibility = View.GONE
-        icRight.background = resource
-        IC_RIGHT = true
     }
 
     private fun setStatus(typed: Int) {
@@ -208,10 +171,7 @@ class Button : LinearLayout {
                 icProgress.visibility = View.VISIBLE
                 icProgress.animation = animation
 
-                View.GONE.also {
-                    icLeft.visibility = it
-                    icRight.visibility = it
-                }
+                icMain.visibility = View.GONE
             }
             false -> {
                 icProgress.apply {
@@ -219,13 +179,8 @@ class Button : LinearLayout {
                     animation = null
                 }
 
-                if (IC_LEFT) {
-                    icLeft.visibility = View.VISIBLE
-                }
+                icMain.visibility = View.VISIBLE
 
-                if (IC_RIGHT) {
-                    icRight.visibility = View.VISIBLE
-                }
             }
         }
     }
@@ -235,16 +190,5 @@ class Button : LinearLayout {
         layout.isClickable = !enabled
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    }
-
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
-    }
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-    }
 
 }
