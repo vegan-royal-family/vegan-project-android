@@ -16,6 +16,11 @@ import com.github.royalfamily.vagan.util.SizeUtil
 
 class Button : LinearLayout {
 
+    private val buttonUtil = ButtonUtil(context)
+
+    private var IC_LEFT = false
+    private var IC_RIGHT = false
+
     private lateinit var layout: LinearLayout
     private lateinit var icLeft: ImageView
     private lateinit var icRight: ImageView
@@ -26,47 +31,16 @@ class Button : LinearLayout {
 
     private var iconTyped: Int = 0
 
-    private val STATUS_ENABLED = 1
-    private val STATUS_DISABLED = 0
-    private val STATUS_LOADING = -1
+    private var backgroundColorDefault = buttonUtil.primaryBackgroundColorDefault
+    private var backgroundColorHover = buttonUtil.primaryBackgroundColorHover
+    private var backgroundColorLoading = buttonUtil.primaryBackgroundColorLoading
+    private var backgroundColorDisabled = buttonUtil.primaryBackgroundColorDisabled
 
-    private val SIZE_SMALL = -1
-    private val SIZE_MEDIUM = 0
-    private val SIZE_LARGE = 1
+    private var contentsColorDefault = buttonUtil.primaryContentsColorDefault
+    private var contentsColorHover = buttonUtil.primaryContentsColorHover
+    private var contentsColorLoading = buttonUtil.primaryContentsColorLoading
+    private var contentsColorDisabled = buttonUtil.primaryContentsColorDisabled
 
-
-    private var IC_LEFT = false
-    private var IC_RIGHT = false
-
-    private val primaryBackgroundColorDefault = context.getColor(R.color.primary_500)
-    private val primaryBackgroundColorHover = context.getColor(R.color.primary_600)
-    private val primaryBackgroundColorLoading = context.getColor(R.color.primary_400)
-    private val primaryBackgroundColorDisabled = context.getColor(R.color.primary_100)
-
-    private val primaryContentsColorDefault = context.getColor(R.color.primary_500)
-    private val primaryContentsColorHover = context.getColor(R.color.primary_600)
-    private val primaryContentsColorLoading = context.getColor(R.color.primary_400)
-    private val primaryContentsColorDisabled = context.getColor(R.color.primary_100)
-
-    private val secondaryBackgroundColorDefault = context.getColor(R.color.gray_200)
-    private val secondaryBackgroundColorHover = context.getColor(R.color.primary_300)
-    private val secondaryBackgroundColorLoading = context.getColor(R.color.primary_200)
-    private val secondaryBackgroundColorDisabled = context.getColor(R.color.primary_200)
-
-    private val secondaryContentsColorDefault = context.getColor(R.color.gray_900)
-    private val secondaryContentsColorHover = context.getColor(R.color.gray_900)
-    private val secondaryContentsColorLoading = context.getColor(R.color.gray_600)
-    private val secondaryContentsColorDisabled = context.getColor(R.color.gray_400)
-
-    private var backgroundColorDefault = primaryBackgroundColorDefault
-    private var backgroundColorHover = primaryBackgroundColorHover
-    private var backgroundColorLoading = primaryBackgroundColorLoading
-    private var backgroundColorDisabled = primaryBackgroundColorDisabled
-
-    private var contentsColorDefault = primaryContentsColorDefault
-    private var contentsColorHover = primaryContentsColorHover
-    private var contentsColorLoading = primaryContentsColorLoading
-    private var contentsColorDisabled = primaryContentsColorDisabled
 
 
     constructor(context: Context?) : super(context) {
@@ -111,9 +85,9 @@ class Button : LinearLayout {
 
         setColorSystem(typedArray.getInteger(R.styleable.BasicButton_colorClass, 1))
         typedArray.getString(R.styleable.BasicButton_text)?.let { setText(it) }
-        setButtonSize(typedArray.getInteger(R.styleable.BasicButton_size, SIZE_MEDIUM))
+        setButtonSize(typedArray.getInteger(R.styleable.BasicButton_size, buttonUtil.SIZE_MEDIUM))
         setIcon(typedArray)
-        setStatus(typedArray.getInteger(R.styleable.BasicButton_status, STATUS_ENABLED))
+        setStatus(typedArray.getInteger(R.styleable.BasicButton_status, buttonUtil.STATUS_ENABLED))
 
         typedArray.recycle()
 
@@ -122,26 +96,26 @@ class Button : LinearLayout {
     private fun setColorSystem(typed: Int) {
         when (typed) {
             1 -> {
-                backgroundColorDefault = primaryBackgroundColorDefault
-                backgroundColorHover = primaryBackgroundColorHover
-                backgroundColorLoading = primaryBackgroundColorLoading
-                backgroundColorDisabled = primaryBackgroundColorDisabled
+                backgroundColorDefault = buttonUtil.primaryBackgroundColorDefault
+                backgroundColorHover = buttonUtil.primaryBackgroundColorHover
+                backgroundColorLoading = buttonUtil.primaryBackgroundColorLoading
+                backgroundColorDisabled = buttonUtil.primaryBackgroundColorDisabled
 
-                contentsColorDefault = primaryContentsColorDefault
-                contentsColorHover = primaryContentsColorHover
-                contentsColorLoading = primaryContentsColorLoading
-                contentsColorDisabled = primaryContentsColorDisabled
+                contentsColorDefault = buttonUtil.primaryContentsColorDefault
+                contentsColorHover = buttonUtil.primaryContentsColorHover
+                contentsColorLoading = buttonUtil.primaryContentsColorLoading
+                contentsColorDisabled = buttonUtil.primaryContentsColorDisabled
             }
             2 -> {
-                backgroundColorDefault = secondaryBackgroundColorDefault
-                backgroundColorHover = secondaryBackgroundColorHover
-                backgroundColorLoading = secondaryBackgroundColorLoading
-                backgroundColorDisabled = secondaryBackgroundColorDisabled
+                backgroundColorDefault = buttonUtil.secondaryBackgroundColorDefault
+                backgroundColorHover = buttonUtil.secondaryBackgroundColorHover
+                backgroundColorLoading = buttonUtil.secondaryBackgroundColorLoading
+                backgroundColorDisabled = buttonUtil.secondaryBackgroundColorDisabled
 
-                contentsColorDefault = secondaryContentsColorDefault
-                contentsColorHover = secondaryContentsColorHover
-                contentsColorLoading = secondaryContentsColorLoading
-                contentsColorDisabled = secondaryContentsColorDisabled
+                contentsColorDefault = buttonUtil.secondaryContentsColorDefault
+                contentsColorHover = buttonUtil.secondaryContentsColorHover
+                contentsColorLoading = buttonUtil.secondaryContentsColorLoading
+                contentsColorDisabled = buttonUtil.secondaryContentsColorDisabled
             }
         }
     }
@@ -164,7 +138,7 @@ class Button : LinearLayout {
 
     private fun setButtonSize(typed: Int) {
         when (typed) {
-            SIZE_SMALL -> {
+            buttonUtil.SIZE_SMALL -> {
                 layout.setPadding(
                     sizeUtil.dpToPx(16),
                     sizeUtil.dpToPx(6),
@@ -172,7 +146,7 @@ class Button : LinearLayout {
                     sizeUtil.dpToPx(6)
                 )
             }
-            SIZE_MEDIUM -> {
+            buttonUtil.SIZE_MEDIUM -> {
                 layout.setPadding(
                     sizeUtil.dpToPx(24),
                     sizeUtil.dpToPx(10),
@@ -180,7 +154,7 @@ class Button : LinearLayout {
                     sizeUtil.dpToPx(10)
                 )
             }
-            SIZE_LARGE -> {
+            buttonUtil.SIZE_LARGE -> {
                 layout.setPadding(
                     sizeUtil.dpToPx(24),
                     sizeUtil.dpToPx(16),
@@ -207,17 +181,17 @@ class Button : LinearLayout {
 
     private fun setStatus(typed: Int) {
         when (typed) {
-            STATUS_ENABLED -> {
+            buttonUtil.STATUS_ENABLED -> {
                 isShowLoading(false)
                 isEnabled(true)
                 layout.setBackgroundResource(R.drawable.bg_btn_default)
             }
-            STATUS_LOADING -> {
+            buttonUtil.STATUS_LOADING -> {
                 isShowLoading(true)
                 isEnabled(false)
                 layout.setBackgroundResource(R.drawable.bg_btn_loading)
             }
-            STATUS_DISABLED -> {
+            buttonUtil.STATUS_DISABLED -> {
                 isShowLoading(false)
                 isEnabled(false)
                 layout.setBackgroundResource(R.drawable.bg_btn_disabled)
