@@ -14,13 +14,12 @@ import android.widget.TextView
 import com.github.royalfamily.vagan.R
 import com.github.royalfamily.vagan.util.SizeUtil
 
-class Button : LinearLayout {
+class CustomTextButton : LinearLayout {
 
     private lateinit var layout: LinearLayout
     private lateinit var icLeft: ImageView
     private lateinit var icRight: ImageView
     private lateinit var tvContents: TextView
-    private lateinit var icProgress: ImageView
 
     private val sizeUtil: SizeUtil = SizeUtil(context.resources)
 
@@ -28,7 +27,6 @@ class Button : LinearLayout {
 
     private val STATUS_ENABLED = 1
     private val STATUS_DISABLED = 0
-    private val STATUS_LOADING = -1
 
     private val SIZE_SMALL = -1
     private val SIZE_MEDIUM = 0
@@ -85,34 +83,36 @@ class Button : LinearLayout {
     private fun initView() {
         val infService: String = Context.LAYOUT_INFLATER_SERVICE
         val li = context.getSystemService(infService) as LayoutInflater
-        val v: View = li.inflate(R.layout.component_button, this, false)
+        val v: View = li.inflate(R.layout.component_text_button, this, false)
         addView(v)
 
         layout = findViewById(R.id.btn_layout)
         icLeft = findViewById(R.id.ic_left)
         icRight = findViewById(R.id.ic_right)
         tvContents = findViewById(R.id.tv_contents)
-        icProgress = findViewById(R.id.ic_progress)
     }
 
     private fun getAttrs(attrs: AttributeSet?) {
-        val typedArray: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.BasicButton)
+        val typedArray: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomTextButton)
         setTypeArray(typedArray)
     }
 
     private fun getAttrs(attrs: AttributeSet?, defStyle: Int) {
         val typedArray =
-            context.obtainStyledAttributes(attrs, R.styleable.BasicButton, defStyle, 0)
+            context.obtainStyledAttributes(attrs, R.styleable.CustomTextButton, defStyle, 0)
         setTypeArray(typedArray)
     }
 
     private fun setTypeArray(typedArray: TypedArray) {
 
-        setColorSystem(typedArray.getInteger(R.styleable.BasicButton_colorClass, 1))
-        typedArray.getString(R.styleable.BasicButton_text)?.let { setText(it) }
-        setButtonSize(typedArray.getInteger(R.styleable.BasicButton_size, SIZE_MEDIUM))
+        // setColorSystem(typedArray.getInteger(R.styleable.CustomTextButton_colorClass, 1))
+        typedArray.getString(R.styleable.CustomTextButton_text)?.let { setText(it) }
+
+        setIconSize(typedArray.getInteger(R.styleable.CustomTextButton_size, SIZE_MEDIUM))
+        setTextSize(typedArray.getInteger(R.styleable.CustomTextButton_size, SIZE_MEDIUM))
+
         setIcon(typedArray)
-        setStatus(typedArray.getInteger(R.styleable.BasicButton_status, STATUS_ENABLED))
+        setStatus(typedArray.getInteger(R.styleable.CustomTextButton_status, STATUS_ENABLED))
 
         typedArray.recycle()
 
@@ -150,42 +150,44 @@ class Button : LinearLayout {
     }
 
     private fun setIcon(typedArray: TypedArray) {
-        val leftIcon = typedArray.getDrawable(R.styleable.BasicButton_setLeftIcon)
+        val leftIcon = typedArray.getDrawable(R.styleable.CustomTextButton_setLeftIcon)
         if (leftIcon != null) {
             setLeftIcon(leftIcon)
         }
 
-        val rightIcon = typedArray.getDrawable(R.styleable.BasicButton_setRightIcon)
+        val rightIcon = typedArray.getDrawable(R.styleable.CustomTextButton_setRightIcon)
         if (rightIcon != null) {
             setRightIcon(rightIcon)
         }
     }
 
-    private fun setButtonSize(typed: Int) {
+    private fun setIconSize(typed: Int){
         when (typed) {
             SIZE_SMALL -> {
-                layout.setPadding(
-                    sizeUtil.dpToPx(16),
-                    sizeUtil.dpToPx(6),
-                    sizeUtil.dpToPx(16),
-                    sizeUtil.dpToPx(6)
-                )
+                icLeft.layoutParams.width = sizeUtil.dpToPx(16)
+                icLeft.layoutParams.height = sizeUtil.dpToPx(16)
             }
             SIZE_MEDIUM -> {
-                layout.setPadding(
-                    sizeUtil.dpToPx(24),
-                    sizeUtil.dpToPx(10),
-                    sizeUtil.dpToPx(24),
-                    sizeUtil.dpToPx(10)
-                )
+                icLeft.layoutParams.width = sizeUtil.dpToPx(20)
+                icLeft.layoutParams.height = sizeUtil.dpToPx(20)
             }
             SIZE_LARGE -> {
-                layout.setPadding(
-                    sizeUtil.dpToPx(24),
-                    sizeUtil.dpToPx(16),
-                    sizeUtil.dpToPx(24),
-                    sizeUtil.dpToPx(16)
-                )
+                icLeft.layoutParams.width = sizeUtil.dpToPx(24)
+                icLeft.layoutParams.height = sizeUtil.dpToPx(24)
+            }
+        }
+    }
+
+    private fun setTextSize(typed: Int) {
+        when (typed) {
+            SIZE_SMALL -> {
+                tvContents.textSize = sizeUtil.dpToPx(16).toFloat()
+            }
+            SIZE_MEDIUM -> {
+                tvContents.textSize = sizeUtil.dpToPx(20).toFloat()
+            }
+            SIZE_LARGE -> {
+                tvContents.textSize = sizeUtil.dpToPx(24).toFloat()
             }
         }
     }
@@ -207,52 +209,15 @@ class Button : LinearLayout {
     private fun setStatus(typed: Int) {
         when (typed) {
             STATUS_ENABLED -> {
-                isShowLoading(false)
                 isEnabled(true)
-                layout.setBackgroundResource(R.drawable.bg_btn_default)
-            }
-            STATUS_LOADING -> {
-                isShowLoading(true)
-                isEnabled(false)
-                layout.setBackgroundResource(R.drawable.bg_btn_loading)
+                // layout.setBackgroundResource(R.drawable.bg_btn_default)
             }
             STATUS_DISABLED -> {
-                isShowLoading(false)
                 isEnabled(false)
-                layout.setBackgroundResource(R.drawable.bg_btn_disabled)
+                // layout.setBackgroundResource(R.drawable.bg_btn_disabled)
             }
         }
 
-    }
-
-    private fun isShowLoading(visible: Boolean) {
-        when (visible) {
-            true -> {
-                val animation = AnimationUtils.loadAnimation(context, R.anim.rotate_progress)
-
-                icProgress.visibility = View.VISIBLE
-                icProgress.animation = animation
-
-                View.GONE.also {
-                    icLeft.visibility = it
-                    icRight.visibility = it
-                }
-            }
-            false -> {
-                icProgress.apply {
-                    visibility = View.GONE
-                    animation = null
-                }
-
-                if (IC_LEFT) {
-                    icLeft.visibility = View.VISIBLE
-                }
-
-                if (IC_RIGHT) {
-                    icRight.visibility = View.VISIBLE
-                }
-            }
-        }
     }
 
     private fun isEnabled(enabled: Boolean) {
@@ -271,5 +236,4 @@ class Button : LinearLayout {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
     }
-
 }

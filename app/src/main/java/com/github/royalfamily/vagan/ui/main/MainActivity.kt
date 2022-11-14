@@ -2,6 +2,7 @@ package com.github.royalfamily.vagan.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.github.royalfamily.vagan.ui.base.BaseActivity
 import com.github.royalfamily.vagan.R
 import com.github.royalfamily.vagan.databinding.ActivityMainBinding
@@ -34,6 +35,9 @@ class MainActivity : BaseActivity() {
         binding.btnNext.setOnClickListener {
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             finish()
+        }
+
+        binding.btnTxt.setOnClickListener{
         }
     }
 }
