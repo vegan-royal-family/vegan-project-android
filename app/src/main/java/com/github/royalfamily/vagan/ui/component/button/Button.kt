@@ -34,6 +34,7 @@ class Button : LinearLayout {
     private val SIZE_MEDIUM = 0
     private val SIZE_LARGE = 1
 
+
     private var IC_LEFT = false
     private var IC_RIGHT = false
 

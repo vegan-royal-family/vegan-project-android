@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="GlobalAttrDeclare">
+
+<!--    <declare-styleable name="LoginButton">-->
+<!--        &lt;!&ndash;        <attr name="text" format="reference|string" />&ndash;&gt;-->
+<!--        <attr name="textColor" format="reference|integer" />-->
+<!--    </declare-styleable>-->
+
+    <declare-styleable name="BasicButton">
         <attr name="size" format="enum">
             <enum name="small" value="-1"/>
             <enum name="medium" value="0"/>
             <enum name="large" value="1"/>
         </attr>
+        <!--        <attr name="icon_type" format="enum">-->
+        <!--            <enum name="no" value="0"/>-->
+        <!--            <enum name="right" value="1"/>-->
+        <!--            <enum name="left" value="2"/>-->
+        <!--        </attr>-->
         <attr name="text" format="reference|string" />
         <attr name="colorClass" format="enum">
             <enum name="primary" value="1"/>
@@ -22,47 +33,4 @@
         <attr name="android:enabled" format="boolean"/>
     </declare-styleable>
 
-    <declare-styleable name="BasicButton">
-        <attr name="size" />
-        <attr name="text" />
-        <attr name="colorClass" />
-        <attr name="android:background"  />
-        <attr name="setLeftIcon"  />
-        <attr name="setRightIcon"  />
-        <attr name="status" />
-        <attr name="android:enabled" />
-    </declare-styleable>
-
-    <declare-styleable name="CustomTextButton">
-        <attr name="size" />
-        <attr name="text" />
-        <attr name="colorClass" />
-        <attr name="android:background"  />
-        <attr name="setLeftIcon"  />
-        <attr name="setRightIcon"  />
-        <attr name="status" />
-        <attr name="android:enabled" />
-    </declare-styleable>
-
-<!--    <declare-styleable name="BasicButton">-->
-<!--        <attr name="size" format="enum">-->
-<!--            <enum name="small" value="-1"/>-->
-<!--            <enum name="medium" value="0"/>-->
-<!--            <enum name="large" value="1"/>-->
-<!--        </attr>-->
-<!--        <attr name="text" format="reference|string" />-->
-<!--        <attr name="colorClass" format="enum">-->
-<!--            <enum name="primary" value="1"/>-->
-<!--            <enum name="secondary" value="2"/>-->
-<!--        </attr>-->
-<!--        <attr name="android:background" format="integer" />-->
-<!--        <attr name="setLeftIcon" format="integer" />-->
-<!--        <attr name="setRightIcon" format="integer" />-->
-<!--        <attr name="status" format="enum">-->
-<!--            <enum name="state_enabled" value="1"/>-->
-<!--            <enum name="state_disabled" value="0"/>-->
-<!--            <enum name="state_loading" value="-1"/>-->
-<!--        </attr>-->
-<!--        <attr name="android:enabled" format="boolean"/>-->
-<!--    </declare-styleable>-->
 </resources>

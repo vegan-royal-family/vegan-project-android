@@ -20,26 +20,11 @@
             android:id="@+id/btn_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:text="로그인 페이지로 이동"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <com.github.royalfamily.vagan.ui.component.button.CustomTextButton
-            android:id="@+id/btn_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            app:text="small"
-            app:size="small"
-
-            app:layout_constraintBottom_toTopOf="@+id/btn_next"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
