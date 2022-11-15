@@ -5,16 +5,24 @@
     binding 할 데이터는 layout 태그 내부의 data 태그에 선언하면 됩니다.
 -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-    </data>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <com.github.royalfamily.vagan.ui.component.button.CustomTextButton
+            android:id="@+id/btn_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:text="middle"
+
+            app:layout_constraintBottom_toTopOf="@+id/btn_next"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <com.github.royalfamily.vagan.ui.component.button.Button
             android:id="@+id/btn_next"
