@@ -13,7 +13,7 @@
             <enum name="secondary" value="2"/>
         </attr>
         <attr name="android:background" format="integer" />
-        <attr name="setLeftIcon" format="integer" />
+        <attr name="setLeftIcon" format="reference" />
         <attr name="setRightIcon" format="integer" />
         <attr name="status" format="enum">
             <enum name="state_enabled" value="1"/>

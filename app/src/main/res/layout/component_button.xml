@@ -16,6 +16,7 @@
 
 
     <TextView
+        android:textAppearance="@style/Body2.B"
         android:id="@+id/tv_contents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

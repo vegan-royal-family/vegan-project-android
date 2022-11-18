@@ -1,20 +1,25 @@
 package com.github.royalfamily.vagan.ui.component.button
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.graphics.drawable.DrawableCompat
 import com.github.royalfamily.vagan.R
 import com.github.royalfamily.vagan.util.SizeUtil
 
-class CustomTextButton : LinearLayout {
+
+class CustomTextButton : LinearLayout{
 
     private lateinit var layout: LinearLayout
     private lateinit var icLeft: ImageView
@@ -25,8 +30,8 @@ class CustomTextButton : LinearLayout {
 
     private var iconTyped: Int = 0
 
-    private val STATUS_ENABLED = 1
-    private val STATUS_DISABLED = 0
+    val STATUS_ENABLED = 1
+    val STATUS_DISABLED = 0
 
     private val SIZE_SMALL = -1
     private val SIZE_MEDIUM = 0
@@ -35,34 +40,16 @@ class CustomTextButton : LinearLayout {
     private var IC_LEFT = false
     private var IC_RIGHT = false
 
-    private val primaryBackgroundColorDefault = context.getColor(R.color.primary_500)
-    private val primaryBackgroundColorHover = context.getColor(R.color.primary_600)
-    private val primaryBackgroundColorLoading = context.getColor(R.color.primary_400)
-    private val primaryBackgroundColorDisabled = context.getColor(R.color.primary_100)
-
     private val primaryContentsColorDefault = context.getColor(R.color.primary_500)
     private val primaryContentsColorHover = context.getColor(R.color.primary_600)
-    private val primaryContentsColorLoading = context.getColor(R.color.primary_400)
     private val primaryContentsColorDisabled = context.getColor(R.color.primary_100)
-
-    private val secondaryBackgroundColorDefault = context.getColor(R.color.gray_200)
-    private val secondaryBackgroundColorHover = context.getColor(R.color.primary_300)
-    private val secondaryBackgroundColorLoading = context.getColor(R.color.primary_200)
-    private val secondaryBackgroundColorDisabled = context.getColor(R.color.primary_200)
 
     private val secondaryContentsColorDefault = context.getColor(R.color.gray_900)
     private val secondaryContentsColorHover = context.getColor(R.color.gray_900)
-    private val secondaryContentsColorLoading = context.getColor(R.color.gray_600)
     private val secondaryContentsColorDisabled = context.getColor(R.color.gray_400)
-
-    private var backgroundColorDefault = primaryBackgroundColorDefault
-    private var backgroundColorHover = primaryBackgroundColorHover
-    private var backgroundColorLoading = primaryBackgroundColorLoading
-    private var backgroundColorDisabled = primaryBackgroundColorDisabled
 
     private var contentsColorDefault = primaryContentsColorDefault
     private var contentsColorHover = primaryContentsColorHover
-    private var contentsColorLoading = primaryContentsColorLoading
     private var contentsColorDisabled = primaryContentsColorDisabled
 
 
@@ -90,10 +77,13 @@ class CustomTextButton : LinearLayout {
         icLeft = findViewById(R.id.ic_left)
         icRight = findViewById(R.id.ic_right)
         tvContents = findViewById(R.id.tv_contents)
+
+
     }
 
     private fun getAttrs(attrs: AttributeSet?) {
-        val typedArray: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomTextButton)
+        val typedArray: TypedArray =
+            context.obtainStyledAttributes(attrs, R.styleable.CustomTextButton)
         setTypeArray(typedArray)
     }
 
@@ -105,13 +95,14 @@ class CustomTextButton : LinearLayout {
 
     private fun setTypeArray(typedArray: TypedArray) {
 
-        // setColorSystem(typedArray.getInteger(R.styleable.CustomTextButton_colorClass, 1))
+        setTextSize(typedArray.getInteger(R.styleable.CustomTextButton_size, SIZE_MEDIUM))
+        setIcon(typedArray)
+
+        setColorSystem(typedArray.getInteger(R.styleable.CustomTextButton_colorClass, 1))
         typedArray.getString(R.styleable.CustomTextButton_text)?.let { setText(it) }
 
         setIconSize(typedArray.getInteger(R.styleable.CustomTextButton_size, SIZE_MEDIUM))
-        setTextSize(typedArray.getInteger(R.styleable.CustomTextButton_size, SIZE_MEDIUM))
 
-        setIcon(typedArray)
         setStatus(typedArray.getInteger(R.styleable.CustomTextButton_status, STATUS_ENABLED))
 
         typedArray.recycle()
@@ -121,27 +112,29 @@ class CustomTextButton : LinearLayout {
     private fun setColorSystem(typed: Int) {
         when (typed) {
             1 -> {
-                backgroundColorDefault = primaryBackgroundColorDefault
-                backgroundColorHover = primaryBackgroundColorHover
-                backgroundColorLoading = primaryBackgroundColorLoading
-                backgroundColorDisabled = primaryBackgroundColorDisabled
-
                 contentsColorDefault = primaryContentsColorDefault
                 contentsColorHover = primaryContentsColorHover
-                contentsColorLoading = primaryContentsColorLoading
                 contentsColorDisabled = primaryContentsColorDisabled
+
+                changeColorState(R.color.btn_text_color_primary)?.let {
+                    tvContents.setTextColor(it)
+                }
             }
             2 -> {
-                backgroundColorDefault = secondaryBackgroundColorDefault
-                backgroundColorHover = secondaryBackgroundColorHover
-                backgroundColorLoading = secondaryBackgroundColorLoading
-                backgroundColorDisabled = secondaryBackgroundColorDisabled
-
                 contentsColorDefault = secondaryContentsColorDefault
                 contentsColorHover = secondaryContentsColorHover
-                contentsColorLoading = secondaryContentsColorLoading
                 contentsColorDisabled = secondaryContentsColorDisabled
+
+                changeColorState(R.color.btn_text_color_secondary)?.let {
+                    tvContents.setTextColor(it)
+                }
             }
+        }
+        if (IC_RIGHT) {
+            DrawableCompat.setTint(icRight.drawable, contentsColorDefault)
+        }
+        if (IC_LEFT) {
+            DrawableCompat.setTint(icLeft.drawable, contentsColorDefault)
         }
     }
 
@@ -161,7 +154,7 @@ class CustomTextButton : LinearLayout {
         }
     }
 
-    private fun setIconSize(typed: Int){
+    private fun setIconSize(typed: Int) {
         when (typed) {
             SIZE_SMALL -> {
                 icLeft.layoutParams.width = sizeUtil.dpToPx(16)
@@ -181,13 +174,13 @@ class CustomTextButton : LinearLayout {
     private fun setTextSize(typed: Int) {
         when (typed) {
             SIZE_SMALL -> {
-                tvContents.textSize = sizeUtil.dpToPx(16).toFloat()
+                tvContents.setTextAppearance(R.style.Body4_B)
             }
             SIZE_MEDIUM -> {
-                tvContents.textSize = sizeUtil.dpToPx(20).toFloat()
+                tvContents.setTextAppearance(R.style.Body3_B)
             }
             SIZE_LARGE -> {
-                tvContents.textSize = sizeUtil.dpToPx(24).toFloat()
+                tvContents.setTextAppearance(R.style.Body2_B)
             }
         }
     }
@@ -195,26 +188,26 @@ class CustomTextButton : LinearLayout {
     private fun setLeftIcon(resource: Drawable) {
         icRight.visibility = View.GONE
         icLeft.visibility = View.VISIBLE
-        icLeft.background = resource
+        icLeft.setImageDrawable(resource)
         IC_LEFT = true
     }
 
     private fun setRightIcon(resource: Drawable) {
         icRight.visibility = View.VISIBLE
         icLeft.visibility = View.GONE
-        icRight.background = resource
+        icRight.setImageDrawable(resource)
         IC_RIGHT = true
     }
 
-    private fun setStatus(typed: Int) {
+    fun setStatus(typed: Int) {
         when (typed) {
             STATUS_ENABLED -> {
                 isEnabled(true)
-                // layout.setBackgroundResource(R.drawable.bg_btn_default)
+//                setColor(primaryContentsColorDefault)
             }
             STATUS_DISABLED -> {
                 isEnabled(false)
-                // layout.setBackgroundResource(R.drawable.bg_btn_disabled)
+//                setColor(primaryContentsColorDefault)
             }
         }
 
@@ -223,6 +216,41 @@ class CustomTextButton : LinearLayout {
     private fun isEnabled(enabled: Boolean) {
         layout.isEnabled = !enabled
         layout.isClickable = !enabled
+
+        when (enabled) {
+            true -> {
+                contentsColorDefault.apply {
+                    tvContents.setTextColor(this)
+                    if (IC_LEFT) {
+                        DrawableCompat.setTint(icLeft.drawable, this)
+                    }
+                    if (IC_RIGHT) {
+                        DrawableCompat.setTint(icRight.drawable, this)
+                    }
+                }
+                tvContents.setTextColor(contentsColorDefault)
+            }
+            false -> {
+                contentsColorDisabled.apply {
+                    tvContents.setTextColor(this)
+                    if (IC_LEFT) {
+                        DrawableCompat.setTint(icLeft.drawable, this)
+                    }
+                    if (IC_RIGHT) {
+                        DrawableCompat.setTint(icRight.drawable, this)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setColor(color: Int) {
+        if (IC_LEFT) {
+            icLeft.setBackgroundColor(color)
+        }
+        if (IC_RIGHT) {
+            icRight.setBackgroundColor(color)
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -236,4 +264,18 @@ class CustomTextButton : LinearLayout {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
     }
+
+    private fun changeColorState(resId: Int): ColorStateList? {
+        var cl: ColorStateList? = null
+        try {
+            val xpp = resources.getXml(resId)
+            cl = ColorStateList.createFromXml(resources, xpp)
+
+            return cl
+        } catch (e: Exception) {
+        }
+
+        return null
+    }
+
 }
