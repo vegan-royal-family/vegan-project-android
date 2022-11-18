@@ -14,7 +14,7 @@
         android:layout_height="20dp"
         />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
         android:minHeight="0dp"
         android:clickable="false"
         android:minWidth="0dp"
