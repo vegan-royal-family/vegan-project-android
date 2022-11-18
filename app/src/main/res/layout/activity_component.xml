@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_200"
+        android:orientation="vertical">
+
+        <com.github.royalfamily.vagan.ui.component.button.Button
+            android:id="@+id/basic_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:colorClass="secondary"
+            app:setLeftIcon="@drawable/ic_icons"
+            app:size="medium"
+            app:text="BasicButton" />
+
+        <com.github.royalfamily.vagan.ui.component.button.CustomTextButton
+            android:id="@+id/text_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:size="small"
+            app:text="Textbutton" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                style="@style/RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="RadioButton1" />
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                style="@style/RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="RadioButton2" />
+        </RadioGroup>
+
+    </LinearLayout>
+</layout>
