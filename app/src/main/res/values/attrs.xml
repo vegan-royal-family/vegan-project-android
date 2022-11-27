@@ -45,4 +45,15 @@
         <attr name="android:enabled" />
     </declare-styleable>
 
+    <declare-styleable name="InputField">
+<!--        <attr name="size" />-->
+<!--        <attr name="text" />-->
+<!--        <attr name="colorClass" />-->
+<!--        <attr name="android:background" />-->
+<!--        <attr name="setLeftIcon" />-->
+<!--        <attr name="setRightIcon"  />-->
+<!--        <attr name="status" />-->
+<!--        <attr name="android:enabled" />-->
+    </declare-styleable>
+
 </resources>

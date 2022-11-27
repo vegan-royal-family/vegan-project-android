@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Body3.M"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/tv_input_filed"
+        app:boxStrokeErrorColor="@color/danger_500"
+        app:boxStrokeWidthFocused="1dp"
+        app:helperText="hello"
+        app:endIconDrawable="@drawable/ic_suffix_input_field"
+        app:errorIconDrawable="@drawable/ic_suffix_input_field"
+        app:helperTextTextAppearance="@style/Body4.R"
+        app:helperTextTextColor="@color/gray_500"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Body2.R"
+            android:textColorHint="@color/gray_400" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/gray_200</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="android:textColorHint">@color/gray_400</item>
+        <item name="boxBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="EditText" parent="Base.Widget.MaterialComponents.TextInputEditText">
+        <item name="android:textColorHint">@color/gray_400</item>
+        <item name="android:textCursorDrawable">@drawable/bg_edittext_cursor</item>
+        <item name="android:textAppearance">@style/Body3</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>-->
+
+</LinearLayout>
