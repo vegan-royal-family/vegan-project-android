@@ -50,6 +50,13 @@
                 android:layout_weight="1"
                 android:text="RadioButton2" />
         </RadioGroup>
+        
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/CheckBox"
+            android:text="CheckBox"
+            />
 
     </LinearLayout>
 </layout>
